@@ -33,4 +33,5 @@ public function getServiceManager()
 Usage tutorials
 -----
 http://www.youtube.com/zf2tutoriais
+
 http://www.zf2.com.br

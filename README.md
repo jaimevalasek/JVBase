@@ -2,9 +2,9 @@ JVBase 1.0
 ================
 Create By: Jaime Marcelo Valasek
 
-Modulo base to use a structure Mapper Service and the ZF2
+Module base to use a structure Mapper Service and the ZF2
 
-Start program with a structure ready. Advisable to use the Modulo JVBase for beginners and / or people who have no knowledge of how to build a well structured project.
+Start program with a structure ready. Advisable to use the Module JVBase for beginners and / or people who have no knowledge of how to build a well structured project.
 
 Installation
 -----
@@ -12,7 +12,7 @@ Download this module into the vendor folder of your project.
 
 Enable the module in the file application.config.php. Add the module JVBase.
 
-Adicione 
+Add this code inside your Module.php APPLICATION
 
 ```php
 public function getServiceManager() 

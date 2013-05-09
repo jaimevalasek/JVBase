@@ -2,6 +2,8 @@
 
 namespace JVBase\Mapper;
 
+use Zend\Paginator\Paginator;
+
 use Zend\Db\Adapter\Adapter,
 	Zend\Db\ResultSet\ResultSet,
 	Zend\Db\Sql\Select,
@@ -312,8 +314,8 @@ class AbstractMapper implements DbAdapterAwareInterface
 			$paginator->setItemCountPerPage($options['itemCountPerPage']);
 		}
 		
-		if (isset($optios['currentPageNumber'])) {
-			$paginator->setCurrentPageNumber($optios['currentPageNumber']);
+		if (isset($options['currentPageNumber'])) {
+			$paginator->setCurrentPageNumber($options['currentPageNumber']);
 		}
 		
 		return $paginator;

@@ -20,7 +20,7 @@ public function getServiceManager()
     	return array(
     		'initializers' => array(
     			function ($instance, $sm) {
-    				if ($instance instanceof \BASEDefault\Adapter\DbAdapterAwareInterface) {
+    				if ($instance instanceof \JVBase\Adapter\DbAdapterAwareInterface) {
     					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     					$instance->setDbAdapter($dbAdapter);
     				}

@@ -28,8 +28,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	protected $paginatorOptions;
 	
 	
-	/********************* SELECTS BEGIN ************************/
-	
+	/********************* SELECTS BEGIN ************************/	
 	public function findAll($table = null, $resultType = 'array')
     {
         $select = $this->getSelect($table);
@@ -54,6 +53,15 @@ class AbstractMapper implements DbAdapterAwareInterface
     	return $this->selectMany($select, null, $resultType);
     }
 	
+	public function findById($id, $table = null, $resultType = 'array') 
+	{
+	    $where = array(current($this->getTableKeyFields()) => $id);
+		$select = $this->getSelect($table);
+		$select->where($where);
+		$result = $this->selectOne($select, null, $resultType);
+		
+		return $result;
+	}
 	
 	public function findByOne(array $where, $table = null, $resultType = 'array') 
 	{
@@ -101,12 +109,10 @@ class AbstractMapper implements DbAdapterAwareInterface
 		
 		return isset($result) ? $result : false;
 	}
-	
 	/****************************** SELECTS END ****************************/
 	
 	
 	/**************************** TRANSITION BEGIN ***************************/
-	
 	public function insert($data, $table = null, $returnEntity = false)
 	{
 		$table = $table ?: $this->table;
@@ -133,29 +139,39 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	public function update($data, array $where, $table = null, $returnEntity = false)
 	{
-		$table = $table ?: $this->table;
+	    $table = $table ?: $this->table;
 		$data = $this->extract($data, $returnEntity);
-		
+
 		if ($table === $this->table) {
 			$data = $this->cleanData($data);
 		}
-		
+
 		$sql = $this->getSql();
 		$update = $sql->update($table);
 		$update->set($data)->where($where);
-	
+		
+
 		$statement = $sql->prepareStatementForSqlObject($update);
+		
 		try {
 			$result = $statement->execute();
 		} catch(\Exception $e) {
-			print_r($e->getMessage());
+		    throw new \RuntimeException($e->getMessage() . "<br /><br />" . $e->getPrevious());
 		}
-		
+
 		return true;
 	}
 	
-	public function delete(array $where, $table = null)
+	public function delete($where, $table = null)
 	{
+	    if (!is_array($where)) {
+	        $where = (int) $where;
+	    }
+	    
+	    if (is_int($where)) {
+	        $where = array(current($this->getTableKeyFields()) => $where);
+	    }
+	    
 		$table = $table ?: $this->table;
 		$sql = $this->getSql();
 		$delete = $sql->delete($table)->where($where);
@@ -165,11 +181,10 @@ class AbstractMapper implements DbAdapterAwareInterface
 		
 		return true;
 	}
-	
 	/**************************** TRANSITION END ****************************/
+
 	
 	/**************************** TREATMENT BEGIN ***************************/
-	
 	public function dataToTableKeyFields($data)
 	{
 		if (!is_array($this->tableKeyFields)) {
@@ -244,8 +259,8 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	/********************************** TREATMENT END ***********************************/
 	
-	/********************************** SQL BEGIN ***************************************/
 	
+	/********************************** SQL BEGIN ***************************************/
 	public function getSql()
 	{
 		if (!$this->sql instanceof Sql) {
@@ -282,11 +297,10 @@ class AbstractMapper implements DbAdapterAwareInterface
 		
 		return $resultSet;
 	}
-	
 	/************************************ SQL END ***********************************/
 	
+	
 	/********************************* PAGINATOR BEGIN ********************************/
-
 	public function getPaginatorOptions()
 	{
 		return $this->paginatorOptions;
@@ -320,11 +334,10 @@ class AbstractMapper implements DbAdapterAwareInterface
 		
 		return $paginator;
 	}
-	
 	/****************************** PAGINATOR END ******************************/
+
 	
 	/*********************** GETTERS FOR PROTECTED BEGIN ***********************/
-	
 	public function getTable()
 	{
 		return $this->table;
@@ -388,6 +401,6 @@ class AbstractMapper implements DbAdapterAwareInterface
 		$this->tableKeyFields = $tableKeyFields;
 		return $this;
 	}
-	
 	/************************* GETTERS FOR PROTECTED END ***********************/
+	
 }

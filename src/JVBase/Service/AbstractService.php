@@ -23,7 +23,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 		return $result;
 	}
 	
-	public function delete(array $where, $table = null)
+	public function delete($where, $table = null)
 	{
 		$result = $this->getEntityMapper()->delete($where, $table);
 		return $result;
@@ -44,6 +44,12 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 	
 	public function findByAll(array $where, $table = null, $order = null, $resultType = 'array') {
 		$result = $this->getEntityMapper()->findByAll($where, $table, $order, $resultType);
+		return $result;
+	}
+	
+	public function findById($id, $table = null, $resultType = 'array')
+	{
+		$result = $this->getEntityMapper()->findById($id, $table, $resultType);
 		return $result;
 	}
 	

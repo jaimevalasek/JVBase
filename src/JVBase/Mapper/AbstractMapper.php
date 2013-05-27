@@ -36,7 +36,7 @@ class AbstractMapper implements DbAdapterAwareInterface
         return $result;
     }
     
-    public function findByAll(array $where, $table = null, $order = null, $resultType = 'array') {
+    public function findAllBy(array $where, $table = null, $order = null, $resultType = 'array') {
     	if (!is_array($where)) {
     		throw new \Exception('O medoto findAllBy espera um array where, ex: array("id" => "1").');
     	}
@@ -63,7 +63,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 		return $result;
 	}
 	
-	public function findByOne(array $where, $table = null, $resultType = 'array') 
+	public function findOneBy(array $where, $table = null, $resultType = 'array') 
 	{
 		$select = $this->getSelect($table);
 		$select->where($where);
@@ -123,7 +123,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 			$data = $this->cleanData($data);
 		}
 		
-		if ($table === $this->table && $this->findByOne($this->dataToTableKeyFields($data))) {
+		if ($table === $this->table && $this->findOneBy($this->dataToTableKeyFields($data))) {
 			throw new \RuntimeException('Esse registro já existe no banco de dados');
 		}
 		
@@ -150,7 +150,6 @@ class AbstractMapper implements DbAdapterAwareInterface
 		$update = $sql->update($table);
 		$update->set($data)->where($where);
 		
-
 		$statement = $sql->prepareStatementForSqlObject($update);
 		
 		try {

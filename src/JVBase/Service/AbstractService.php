@@ -2,8 +2,8 @@
 
 namespace JVBase\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface,
+    Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 abstract class AbstractService implements ServiceLocatorAwareInterface
 {
@@ -42,8 +42,8 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 		return $result;
 	}
 	
-	public function findByAll(array $where, $table = null, $order = null, $resultType = 'array') {
-		$result = $this->getEntityMapper()->findByAll($where, $table, $order, $resultType);
+	public function findAllBy(array $where, $table = null, $order = null, $resultType = 'array') {
+		$result = $this->getEntityMapper()->findAllBy($where, $table, $order, $resultType);
 		return $result;
 	}
 	
@@ -53,9 +53,9 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 		return $result;
 	}
 	
-	public function findByOne(array $where, $table = null, $resultType = 'array')
+	public function findOneBy(array $where, $table = null, $resultType = 'array')
 	{
-		$result = $this->getEntityMapper()->findByOne($where, $table, $resultType);
+		$result = $this->getEntityMapper()->findOneBy($where, $table, $resultType);
 		return $result;
 	}
 	

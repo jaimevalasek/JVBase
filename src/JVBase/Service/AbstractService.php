@@ -9,6 +9,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 {
 	protected $serviceLocator;
 	protected $entityMapper;
+	protected $pageFilter; // adicionar o esquema do filtro
 	
 	/********************************* TRANSATIONS **********************************/
 	public function insert($data, $table = null, $returnEntity = false)
@@ -17,7 +18,7 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 		return $result;
 	}
 	
-	public function update($data, array $where, $table = null, $returnEntity = false)
+	public function update($data, $where, $table = null, $returnEntity = false)
 	{
 		$result = $this->getEntityMapper()->update($data, $where, $table, $returnEntity);
 		return $result;

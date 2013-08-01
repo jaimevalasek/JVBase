@@ -79,9 +79,8 @@ class AbstractMapper implements DbAdapterAwareInterface
 		
 		switch ($resultType) {
 			case 'object' :
-				$result = $this->extract($result, new ClassMethods(), true);
+				$result = $this->extract($result, true);
 				return $result;
-				break;
 			default:
 				return $result;
 		}
@@ -137,10 +136,22 @@ class AbstractMapper implements DbAdapterAwareInterface
 		return $result->getGeneratedValue();
 	}
 	
-	public function update($data, array $where, $table = null, $returnEntity = false)
+	public function update($data, $oldWhere, $table = null, $returnEntity = false)
 	{
 	    $table = $table ?: $this->table;
 		$data = $this->extract($data, $returnEntity);
+		
+		// verifica se a variável $where não é um array, se não for tratar o como int
+		if (!is_array($oldWhere)) {
+		    // se não for um array é um numero então faz um cast para int
+		    $whereId = (int) $oldWhere;
+		    
+		    // então monta o where usando o tableKeyFields
+		    $where[$this->tableKeyFields[0]] = $whereId;
+		} else {
+		    // se for um array mantem os dados findos criando a variável where com os mesmos dados vindos do oldWhere
+		    $where = $oldWhere;
+		}
 
 		if ($table === $this->table) {
 			$data = $this->cleanData($data);
@@ -161,15 +172,19 @@ class AbstractMapper implements DbAdapterAwareInterface
 		return true;
 	}
 	
-	public function delete($where, $table = null)
+	public function delete($oldWhere, $table = null)
 	{
-	    if (!is_array($where)) {
-	        $where = (int) $where;
-	    }
-	    
-	    if (is_int($where)) {
-	        $where = array(current($this->getTableKeyFields()) => $where);
-	    }
+	    // verifica se a variável $where não é um array, se não for tratar o como int
+		if (!is_array($oldWhere)) {
+		    // se não for um array é um numero então faz um cast para int
+		    $whereId = (int) $oldWhere;
+		    
+		    // então monta o where usando o tableKeyFields
+		    $where[$this->tableKeyFields[0]] = $whereId;
+		} else {
+		    // se for um array mantem os dados findos criando a variável where com os mesmos dados vindos do oldWhere
+		    $where = $oldWhere;
+		}
 	    
 		$table = $table ?: $this->table;
 		$sql = $this->getSql();
@@ -187,7 +202,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 	public function dataToTableKeyFields($data)
 	{
 		if (!is_array($this->tableKeyFields)) {
-			throw new \RuntimeException('Não foi setados os campos desta tabela: ' . $this->table);
+			throw new \RuntimeException('Erro no mapper - não foi setados os campos desta tabela: ' . $this->table);
 		}
 		
 		foreach ($this->tableKeyFields as $field) {
@@ -225,7 +240,7 @@ class AbstractMapper implements DbAdapterAwareInterface
 		return $result;
 	}
 	
-	public function cleanData($data)
+	public function cleanData($data, $excludeEmpty = true)
 	{
 		if (!is_array($this->tableFields) || !count($this->tableFields)) {
 			return $data;
@@ -236,18 +251,23 @@ class AbstractMapper implements DbAdapterAwareInterface
 			if (!in_array($key, $this->tableFields)) {
 				unset($data[$key]);
 			}
+			
+			if ($excludeEmpty && empty($value))
+			{
+			    unset($data[$key]);
+			}
 		}
 		
 		return $data;
 	}
 	
-	public function getModel(array $data = null)
+	public function getModel(array $data = array())
 	{
 		if (is_string($this->model) && class_exists($this->model))
 		{
 			if ($data) {
 				$hydrator = new ClassMethods();
-				return $hydrator->hydrate($data, $this->model);
+				return $hydrator->hydrate($data, new $this->model);
 			}
 			
 			return new $this->model;

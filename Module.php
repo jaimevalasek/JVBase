@@ -68,12 +68,7 @@ class Module implements AutoloaderProviderInterface
 				'jvbase_filter_string' => 'JVBase\Filter\String',
 			),
 			'initializers' => array(
-				function($instance, $sm){
-					if($instance instanceof \JVBase\Adapter\DbAdapterAwareInterface){
-						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-						$instance->setDbAdapter($dbAdapter);
-					}
-				},
+			    'JVBase\Factory\InitializerDb'
 			),
 		);
 	}

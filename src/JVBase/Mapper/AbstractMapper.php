@@ -29,14 +29,18 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	
 	/********************* SELECTS BEGIN ************************/	
-	public function findAll($table = null, $resultType = 'array')
+	public function findAll($table = null, $resultType = 'array', $order = null, $limit = null)
     {
         $select = $this->getSelect($table);
+        
+        if (!is_null($order)) {
+        	$select->order($order);
+        }
         $result = $this->selectMany($select, null, $resultType);
         return $result;
     }
     
-    public function findAllBy(array $where, $table = null, $order = null, $resultType = 'array') {
+    public function findAllBy(array $where, $table = null, $resultType = 'array', $order = null, $limit = null) {
     	if (!is_array($where)) {
     		throw new \Exception('O medoto findAllBy espera um array where, ex: array("id" => "1").');
     	}
@@ -49,7 +53,11 @@ class AbstractMapper implements DbAdapterAwareInterface
     	if ($order) {
     		$select->order($order);
     	}
-    
+    	
+    	if ($limit) {
+    	    $select->limit($limit);
+    	}
+    	
     	return $this->selectMany($select, null, $resultType);
     }
 	
@@ -122,9 +130,9 @@ class AbstractMapper implements DbAdapterAwareInterface
 			$data = $this->cleanData($data);
 		}
 		
-		if ($table === $this->table && $this->findOneBy($this->dataToTableKeyFields($data))) {
+		/* if ($table === $this->table && $this->findOneBy($this->dataToTableKeyFields($data))) {
 			throw new \RuntimeException('Esse registro já existe no banco de dados');
-		}
+		} */
 		
 		$sql = $this->getSql();
 		$insert = $sql->insert($table);

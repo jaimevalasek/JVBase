@@ -37,14 +37,14 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 	}
 	
 	/************************************ SELECTS ************************************/
-	public function findAll($table = null, $resultType = 'array')
+	public function findAll($table = null, $resultType = 'array', $order = null, $limit = null)
 	{
-		$result = $this->getEntityMapper()->findAll($table, $resultType);
+		$result = $this->getEntityMapper()->findAll($table, $resultType, $order, $limit);
 		return $result;
 	}
 	
-	public function findAllBy(array $where, $table = null, $order = null, $resultType = 'array') {
-		$result = $this->getEntityMapper()->findAllBy($where, $table, $order, $resultType);
+	public function findAllBy(array $where, $table = null, $resultType = 'array', $order = null, $limit = null) {
+		$result = $this->getEntityMapper()->findAllBy($where, $table, $resultType, $order, $limit);
 		return $result;
 	}
 	

@@ -341,9 +341,17 @@ class AbstractMapper implements DbAdapterAwareInterface
 	
 	public function usePaginator(array $paginatorOptions = array())
 	{
-		$this->usePaginator = true;
-		$this->paginatorOptions = $paginatorOptions;
-		return $this;
+	    if (!isset($paginatorOptions['cancel'])) {
+    		$this->usePaginator = true;
+    		$this->paginatorOptions = $paginatorOptions;
+	    } elseif ($paginatorOptions['cancel'] = true) {
+	        $this->usePaginator = false;
+	        //$this->paginatorOptions = array();
+	    } else {
+	        $this->usePaginator = true;
+	    }
+        
+	    return $this;
 	}
 	
 	public function initPaginator($select, ResultSetInterface $resultSet = null)

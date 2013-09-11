@@ -2,6 +2,10 @@
 
 namespace JVBase\Service;
 
+use Zend\Paginator\Adapter\ArrayAdapter;
+
+use Zend\Paginator\Paginator;
+
 use Zend\ServiceManager\ServiceLocatorInterface,
     Zend\ServiceManager\ServiceLocatorAwareInterface;
 
@@ -9,6 +13,8 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 {
 	protected $serviceLocator;
 	protected $entityMapper;
+	protected $itemCountPerPage;
+	protected $currentPageNumber;
 	protected $pageFilter; // adicionar o esquema do filtro
 	
 	/********************************* TRANSATIONS **********************************/
@@ -33,7 +39,38 @@ abstract class AbstractService implements ServiceLocatorAwareInterface
 	/************************************ OPTIONS ************************************/
 	public function usePaginator(array $paginatorOptions = array())
 	{
+	    $this->setItemCountPerPage($paginatorOptions['itemCountPerPage']);
+	    $this->setCurrentPageNumber($paginatorOptions['currentPageNumber']);
 		$this->getEntityMapper()->usePaginator($paginatorOptions);
+	}
+	
+	public function paginatorArray($data)
+	{
+	    $paginator = new Paginator(new ArrayAdapter($data));
+	    $paginator->setItemCountPerPage($this->getItemCountPerPage());
+	    $paginator->setCurrentPageNumber($this->getCurrentPageNumber());
+	    
+	    return $paginator;
+	}
+	
+	public function setItemCountPerPage($itemCountPerPage)
+	{
+	    $this->itemCountPerPage = $itemCountPerPage;
+	}
+	
+	public function getItemCountPerPage()
+	{
+	    return $this->itemCountPerPage;
+	}
+	
+	public function setCurrentPageNumber($currentPageNumber)
+	{
+	    $this->currentPageNumber = $currentPageNumber;
+	}
+	
+	public function getCurrentPageNumber()
+	{
+	    return $this->currentPageNumber;
 	}
 	
 	/************************************ SELECTS ************************************/

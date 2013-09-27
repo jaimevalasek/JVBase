@@ -1,0 +1,29 @@
+{
+    "name": "jaimevalasek/jv-base",
+    "description": "Start program with a structure ready. Advisable to use the Module JVBase for beginners and / or people who have no knowledge of how to build a well structured project.",
+    "license": "BSD-3-Clause",
+    "type": "library",
+    "keywords": [
+        "zf2", "jv-base", "abstract structure", "jaimevalasek"
+    ],
+    "homepage": "https://github.com/jaimevalasek/JVBase",
+    "authors": [
+        {
+            "name": "Jaime Marcelo Valasek",
+            "email": "jaime.valasek@gmail.com",
+            "homepage": "http://valasek.com.br"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.*"
+    },    
+    "autoload": {
+        "psr-0": {
+            "JVBase": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}

@@ -2,7 +2,7 @@ JVBase 1.0
 ================
 Create By: Jaime Marcelo Valasek
 
-Module base to use a structure Mapper Service and the ZF2
+Module base to use structure AbstractMapper and AbstractService to ZF2
 
 Start program with a structure ready. Advisable to use the Module JVBase for beginners and / or people who have no knowledge of how to build a well structured project.
 

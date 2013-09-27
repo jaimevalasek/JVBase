@@ -12,23 +12,30 @@ Download this module into the vendor folder of your project.
 
 Enable the module in the file application.config.php. Add the module JVBase.
 
-Add this code inside your Module.php APPLICATION
+create the service connection to the database with the name Zend\Db\Adapter\Adapter
 
-```php
-public function getServiceManager() 
-    {
-    	return array(
-    		'initializers' => array(
-    			function ($instance, $sm) {
-    				if ($instance instanceof \JVBase\Adapter\DbAdapterAwareInterface) {
-    					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-    					$instance->setDbAdapter($dbAdapter);
-    				}
-    			}
-    		)
-    	);
-    }
-```
+### With composer
+
+1. Edit composer.json
+
+`"require": {
+    "jaimemarcelo/jv-base": "dev-master"
+}`
+
+2. Now tell composer to download ZfcUser by running the command:
+
+`php composer.phar update`
+
+### Post installation
+
+`<?php
+return array(
+    'modules' => array(
+        // ...
+        'JVBase',
+    ),
+    // ...
+);`
 
 Usage tutorials
 -----

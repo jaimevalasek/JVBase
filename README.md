@@ -18,24 +18,30 @@ create the service connection to the database with the name Zend\Db\Adapter\Adap
 
 1. Edit composer.json
 
-`"require": {
+```php
+"require": {
     "jaimemarcelo/jv-base": "dev-master"
-}`
+}
+```
 
 2. Now tell composer to download ZfcUser by running the command:
 
-`php composer.phar update`
+```php
+php composer.phar update
+```
 
 ### Post installation
 
-`<?php
+```php
+<?php
 return array(
     'modules' => array(
         // ...
         'JVBase',
     ),
     // ...
-);`
+);
+```
 
 Usage tutorials
 -----

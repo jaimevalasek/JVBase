@@ -1,4 +1,4 @@
-JVBase 1.0
+JVBase
 ================
 Create By: Jaime Marcelo Valasek
 
@@ -20,11 +20,11 @@ create the service connection to the database with the name Zend\Db\Adapter\Adap
 
 ```php
 "require": {
-    "jaimemarcelo/jv-base": "dev-master"
+    "jaimevalasek/jv-base": "dev-master"
 }
 ```
 
-2. Now tell composer to download ZfcUser by running the command:
+2. Now tell composer to download JVBase by running the command:
 
 ```php
 php composer.phar update
